@@ -9,7 +9,7 @@ import { mockTables } from "@/data/mockBookings";
 import { CATEGORY_CONFIG } from "@/types/venue.types";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/venue/$venueId/book")({
+export const Route = createFileRoute("/venue/$venueId_/book")({
   component: BookingPage,
   head: ({ params }) => {
     const venue = mockVenues.find((v) => v.id === params.venueId);
