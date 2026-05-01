@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -30,10 +30,15 @@ export const Route = createFileRoute("/restaurant/$id")({
 function RestaurantDetail() {
   const { id } = Route.useParams();
   const r = getRestaurantById(id);
+  const location = useLocation();
   const navigate = useNavigate();
   const [activeImg, setActiveImg] = useState(0);
   const [liked, setLiked] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+
+  if (location.pathname !== `/restaurant/${id}`) {
+    return <Outlet />;
+  }
 
   if (!r) {
     return (

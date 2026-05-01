@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
 import { Authed } from "@/components/layout/Authed";
 import { PageShell, SectionTitle } from "@/components/layout/PageShell";
 import { SocialTabs } from "@/components/social/SocialTabs";
@@ -12,6 +12,12 @@ export const Route = createFileRoute("/social")({
 function SocialIndex() {
   const stories = useAppStore((s) => s.stories);
   const open = useAppStore((s) => s.openStoryViewer);
+  const location = useLocation();
+
+  if (location.pathname !== "/social") {
+    return <Outlet />;
+  }
+
   return (
     <Authed>
       <PageShell>

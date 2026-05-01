@@ -274,6 +274,19 @@ function ActionTile({ icon, label, onClick }: { icon: React.ReactNode; label: st
   );
 }
 
+// Stable, deterministic per-message waveform: hash the id into amplitude
+function waveformHeights(id: string, n: number): number[] {
+  let seed = 0;
+  for (let i = 0; i < id.length; i++) seed = (seed * 31 + id.charCodeAt(i)) >>> 0;
+  const out: number[] = [];
+  for (let i = 0; i < n; i++) {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const r = (seed % 1000) / 1000; // 0..1
+    out.push(Math.round(28 + Math.sin(i * 0.7) * 28 + r * 22));
+  }
+  return out;
+}
+
 function MessageBubble({ message }: { message: ChatMessage }) {
   const time = new Date(message.timestamp).toLocaleTimeString("ru-RU", {
     hour: "2-digit",
@@ -325,11 +338,11 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             ▶
           </button>
           <div className="flex-1 flex items-center gap-px h-6">
-            {Array.from({ length: 28 }).map((_, i) => (
+            {waveformHeights(message.id, 28).map((h, i) => (
               <div
                 key={i}
                 className={cn("w-0.5 rounded-full", message.fromMe ? "bg-black/30" : "bg-white/40")}
-                style={{ height: `${30 + Math.sin(i * 0.7) * 30 + Math.random() * 20}%` }}
+                style={{ height: `${h}%` }}
               />
             ))}
           </div>
