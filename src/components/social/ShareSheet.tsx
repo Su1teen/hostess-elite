@@ -40,10 +40,10 @@ export function ShareSheet({
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(`https://${url}`);
+      toast.success("Ссылка скопирована");
     } catch {
-      // ignore
+      toast.error("Не удалось скопировать ссылку");
     }
-    toast.success("Ссылка скопирована");
     onClose();
   };
 

@@ -222,7 +222,17 @@ export const useAppStore = create<AppState>()(
       sendMessage: (friendId, msg) =>
         set((s) => {
           const existing = s.chats.find((c) => c.friendId === friendId);
-          const lastPreview = msg.text ?? (msg.type === "voice" ? "Голос · 0:00" : "Вложение");
+          const lastPreview =
+            msg.text ??
+            (msg.type === "voice"
+              ? `Голос · 0:${(msg.voiceSeconds ?? 0).toString().padStart(2, "0")}`
+              : msg.type === "venue-share"
+                ? "📍 " + (msg.attachmentTitle ?? "Заведение")
+                : msg.type === "booking-share"
+                  ? "📅 " + (msg.attachmentTitle ?? "Бронь")
+                  : msg.type === "event-share"
+                    ? "✨ " + (msg.attachmentTitle ?? "Событие")
+                    : "Вложение");
           if (existing) {
             return {
               chats: s.chats.map((c) =>
