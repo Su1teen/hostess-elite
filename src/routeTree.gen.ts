@@ -9,14 +9,54 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as SocialRouteImport } from './routes/social'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as VenueVenueIdRouteImport } from './routes/venue.$venueId'
-import { Route as VenueVenueIdBookRouteImport } from './routes/venue.$venueId_.book'
+import { Route as SocialMapRouteImport } from './routes/social.map'
+import { Route as SocialContactsRouteImport } from './routes/social.contacts'
+import { Route as SocialChatRouteImport } from './routes/social.chat'
+import { Route as RestaurantIdRouteImport } from './routes/restaurant.$id'
+import { Route as EventIdRouteImport } from './routes/event.$id'
+import { Route as ChatFriendIdRouteImport } from './routes/chat.$friendId'
+import { Route as AuthPhoneRouteImport } from './routes/auth.phone'
+import { Route as AuthOtpRouteImport } from './routes/auth.otp'
+import { Route as RestaurantIdWaitlistRouteImport } from './routes/restaurant.$id.waitlist'
+import { Route as RestaurantIdPreorderRouteImport } from './routes/restaurant.$id.preorder'
+import { Route as RestaurantIdCheckoutRouteImport } from './routes/restaurant.$id.checkout'
+import { Route as RestaurantIdBookRouteImport } from './routes/restaurant.$id.book'
 
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SocialRoute = SocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsRoute = BookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -24,63 +64,254 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VenueVenueIdRoute = VenueVenueIdRouteImport.update({
-  id: '/venue/$venueId',
-  path: '/venue/$venueId',
+const SocialMapRoute = SocialMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => SocialRoute,
+} as any)
+const SocialContactsRoute = SocialContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => SocialRoute,
+} as any)
+const SocialChatRoute = SocialChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => SocialRoute,
+} as any)
+const RestaurantIdRoute = RestaurantIdRouteImport.update({
+  id: '/restaurant/$id',
+  path: '/restaurant/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VenueVenueIdBookRoute = VenueVenueIdBookRouteImport.update({
-  id: '/venue/$venueId_/book',
-  path: '/venue/$venueId/book',
+const EventIdRoute = EventIdRouteImport.update({
+  id: '/event/$id',
+  path: '/event/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ChatFriendIdRoute = ChatFriendIdRouteImport.update({
+  id: '/chat/$friendId',
+  path: '/chat/$friendId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthPhoneRoute = AuthPhoneRouteImport.update({
+  id: '/auth/phone',
+  path: '/auth/phone',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthOtpRoute = AuthOtpRouteImport.update({
+  id: '/auth/otp',
+  path: '/auth/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RestaurantIdWaitlistRoute = RestaurantIdWaitlistRouteImport.update({
+  id: '/waitlist',
+  path: '/waitlist',
+  getParentRoute: () => RestaurantIdRoute,
+} as any)
+const RestaurantIdPreorderRoute = RestaurantIdPreorderRouteImport.update({
+  id: '/preorder',
+  path: '/preorder',
+  getParentRoute: () => RestaurantIdRoute,
+} as any)
+const RestaurantIdCheckoutRoute = RestaurantIdCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => RestaurantIdRoute,
+} as any)
+const RestaurantIdBookRoute = RestaurantIdBookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => RestaurantIdRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
+  '/events': typeof EventsRoute
+  '/home': typeof HomeRoute
   '/profile': typeof ProfileRoute
-  '/venue/$venueId': typeof VenueVenueIdRoute
-  '/venue/$venueId/book': typeof VenueVenueIdBookRoute
+  '/social': typeof SocialRouteWithChildren
+  '/wallet': typeof WalletRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/phone': typeof AuthPhoneRoute
+  '/chat/$friendId': typeof ChatFriendIdRoute
+  '/event/$id': typeof EventIdRoute
+  '/restaurant/$id': typeof RestaurantIdRouteWithChildren
+  '/social/chat': typeof SocialChatRoute
+  '/social/contacts': typeof SocialContactsRoute
+  '/social/map': typeof SocialMapRoute
+  '/restaurant/$id/book': typeof RestaurantIdBookRoute
+  '/restaurant/$id/checkout': typeof RestaurantIdCheckoutRoute
+  '/restaurant/$id/preorder': typeof RestaurantIdPreorderRoute
+  '/restaurant/$id/waitlist': typeof RestaurantIdWaitlistRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
+  '/events': typeof EventsRoute
+  '/home': typeof HomeRoute
   '/profile': typeof ProfileRoute
-  '/venue/$venueId': typeof VenueVenueIdRoute
-  '/venue/$venueId/book': typeof VenueVenueIdBookRoute
+  '/social': typeof SocialRouteWithChildren
+  '/wallet': typeof WalletRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/phone': typeof AuthPhoneRoute
+  '/chat/$friendId': typeof ChatFriendIdRoute
+  '/event/$id': typeof EventIdRoute
+  '/restaurant/$id': typeof RestaurantIdRouteWithChildren
+  '/social/chat': typeof SocialChatRoute
+  '/social/contacts': typeof SocialContactsRoute
+  '/social/map': typeof SocialMapRoute
+  '/restaurant/$id/book': typeof RestaurantIdBookRoute
+  '/restaurant/$id/checkout': typeof RestaurantIdCheckoutRoute
+  '/restaurant/$id/preorder': typeof RestaurantIdPreorderRoute
+  '/restaurant/$id/waitlist': typeof RestaurantIdWaitlistRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
+  '/events': typeof EventsRoute
+  '/home': typeof HomeRoute
   '/profile': typeof ProfileRoute
-  '/venue/$venueId': typeof VenueVenueIdRoute
-  '/venue/$venueId_/book': typeof VenueVenueIdBookRoute
+  '/social': typeof SocialRouteWithChildren
+  '/wallet': typeof WalletRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/phone': typeof AuthPhoneRoute
+  '/chat/$friendId': typeof ChatFriendIdRoute
+  '/event/$id': typeof EventIdRoute
+  '/restaurant/$id': typeof RestaurantIdRouteWithChildren
+  '/social/chat': typeof SocialChatRoute
+  '/social/contacts': typeof SocialContactsRoute
+  '/social/map': typeof SocialMapRoute
+  '/restaurant/$id/book': typeof RestaurantIdBookRoute
+  '/restaurant/$id/checkout': typeof RestaurantIdCheckoutRoute
+  '/restaurant/$id/preorder': typeof RestaurantIdPreorderRoute
+  '/restaurant/$id/waitlist': typeof RestaurantIdWaitlistRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/venue/$venueId' | '/venue/$venueId/book'
+  fullPaths:
+    | '/'
+    | '/bookings'
+    | '/events'
+    | '/home'
+    | '/profile'
+    | '/social'
+    | '/wallet'
+    | '/auth/otp'
+    | '/auth/phone'
+    | '/chat/$friendId'
+    | '/event/$id'
+    | '/restaurant/$id'
+    | '/social/chat'
+    | '/social/contacts'
+    | '/social/map'
+    | '/restaurant/$id/book'
+    | '/restaurant/$id/checkout'
+    | '/restaurant/$id/preorder'
+    | '/restaurant/$id/waitlist'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/venue/$venueId' | '/venue/$venueId/book'
+  to:
+    | '/'
+    | '/bookings'
+    | '/events'
+    | '/home'
+    | '/profile'
+    | '/social'
+    | '/wallet'
+    | '/auth/otp'
+    | '/auth/phone'
+    | '/chat/$friendId'
+    | '/event/$id'
+    | '/restaurant/$id'
+    | '/social/chat'
+    | '/social/contacts'
+    | '/social/map'
+    | '/restaurant/$id/book'
+    | '/restaurant/$id/checkout'
+    | '/restaurant/$id/preorder'
+    | '/restaurant/$id/waitlist'
   id:
     | '__root__'
     | '/'
+    | '/bookings'
+    | '/events'
+    | '/home'
     | '/profile'
-    | '/venue/$venueId'
-    | '/venue/$venueId_/book'
+    | '/social'
+    | '/wallet'
+    | '/auth/otp'
+    | '/auth/phone'
+    | '/chat/$friendId'
+    | '/event/$id'
+    | '/restaurant/$id'
+    | '/social/chat'
+    | '/social/contacts'
+    | '/social/map'
+    | '/restaurant/$id/book'
+    | '/restaurant/$id/checkout'
+    | '/restaurant/$id/preorder'
+    | '/restaurant/$id/waitlist'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BookingsRoute: typeof BookingsRoute
+  EventsRoute: typeof EventsRoute
+  HomeRoute: typeof HomeRoute
   ProfileRoute: typeof ProfileRoute
-  VenueVenueIdRoute: typeof VenueVenueIdRoute
-  VenueVenueIdBookRoute: typeof VenueVenueIdBookRoute
+  SocialRoute: typeof SocialRouteWithChildren
+  WalletRoute: typeof WalletRoute
+  AuthOtpRoute: typeof AuthOtpRoute
+  AuthPhoneRoute: typeof AuthPhoneRoute
+  ChatFriendIdRoute: typeof ChatFriendIdRoute
+  EventIdRoute: typeof EventIdRoute
+  RestaurantIdRoute: typeof RestaurantIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/social': {
+      id: '/social'
+      path: '/social'
+      fullPath: '/social'
+      preLoaderRoute: typeof SocialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings': {
+      id: '/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof BookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -90,28 +321,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/venue/$venueId': {
-      id: '/venue/$venueId'
-      path: '/venue/$venueId'
-      fullPath: '/venue/$venueId'
-      preLoaderRoute: typeof VenueVenueIdRouteImport
+    '/social/map': {
+      id: '/social/map'
+      path: '/map'
+      fullPath: '/social/map'
+      preLoaderRoute: typeof SocialMapRouteImport
+      parentRoute: typeof SocialRoute
+    }
+    '/social/contacts': {
+      id: '/social/contacts'
+      path: '/contacts'
+      fullPath: '/social/contacts'
+      preLoaderRoute: typeof SocialContactsRouteImport
+      parentRoute: typeof SocialRoute
+    }
+    '/social/chat': {
+      id: '/social/chat'
+      path: '/chat'
+      fullPath: '/social/chat'
+      preLoaderRoute: typeof SocialChatRouteImport
+      parentRoute: typeof SocialRoute
+    }
+    '/restaurant/$id': {
+      id: '/restaurant/$id'
+      path: '/restaurant/$id'
+      fullPath: '/restaurant/$id'
+      preLoaderRoute: typeof RestaurantIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/venue/$venueId_/book': {
-      id: '/venue/$venueId_/book'
-      path: '/venue/$venueId/book'
-      fullPath: '/venue/$venueId/book'
-      preLoaderRoute: typeof VenueVenueIdBookRouteImport
+    '/event/$id': {
+      id: '/event/$id'
+      path: '/event/$id'
+      fullPath: '/event/$id'
+      preLoaderRoute: typeof EventIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/chat/$friendId': {
+      id: '/chat/$friendId'
+      path: '/chat/$friendId'
+      fullPath: '/chat/$friendId'
+      preLoaderRoute: typeof ChatFriendIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/phone': {
+      id: '/auth/phone'
+      path: '/auth/phone'
+      fullPath: '/auth/phone'
+      preLoaderRoute: typeof AuthPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/otp': {
+      id: '/auth/otp'
+      path: '/auth/otp'
+      fullPath: '/auth/otp'
+      preLoaderRoute: typeof AuthOtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/restaurant/$id/waitlist': {
+      id: '/restaurant/$id/waitlist'
+      path: '/waitlist'
+      fullPath: '/restaurant/$id/waitlist'
+      preLoaderRoute: typeof RestaurantIdWaitlistRouteImport
+      parentRoute: typeof RestaurantIdRoute
+    }
+    '/restaurant/$id/preorder': {
+      id: '/restaurant/$id/preorder'
+      path: '/preorder'
+      fullPath: '/restaurant/$id/preorder'
+      preLoaderRoute: typeof RestaurantIdPreorderRouteImport
+      parentRoute: typeof RestaurantIdRoute
+    }
+    '/restaurant/$id/checkout': {
+      id: '/restaurant/$id/checkout'
+      path: '/checkout'
+      fullPath: '/restaurant/$id/checkout'
+      preLoaderRoute: typeof RestaurantIdCheckoutRouteImport
+      parentRoute: typeof RestaurantIdRoute
+    }
+    '/restaurant/$id/book': {
+      id: '/restaurant/$id/book'
+      path: '/book'
+      fullPath: '/restaurant/$id/book'
+      preLoaderRoute: typeof RestaurantIdBookRouteImport
+      parentRoute: typeof RestaurantIdRoute
     }
   }
 }
 
+interface SocialRouteChildren {
+  SocialChatRoute: typeof SocialChatRoute
+  SocialContactsRoute: typeof SocialContactsRoute
+  SocialMapRoute: typeof SocialMapRoute
+}
+
+const SocialRouteChildren: SocialRouteChildren = {
+  SocialChatRoute: SocialChatRoute,
+  SocialContactsRoute: SocialContactsRoute,
+  SocialMapRoute: SocialMapRoute,
+}
+
+const SocialRouteWithChildren =
+  SocialRoute._addFileChildren(SocialRouteChildren)
+
+interface RestaurantIdRouteChildren {
+  RestaurantIdBookRoute: typeof RestaurantIdBookRoute
+  RestaurantIdCheckoutRoute: typeof RestaurantIdCheckoutRoute
+  RestaurantIdPreorderRoute: typeof RestaurantIdPreorderRoute
+  RestaurantIdWaitlistRoute: typeof RestaurantIdWaitlistRoute
+}
+
+const RestaurantIdRouteChildren: RestaurantIdRouteChildren = {
+  RestaurantIdBookRoute: RestaurantIdBookRoute,
+  RestaurantIdCheckoutRoute: RestaurantIdCheckoutRoute,
+  RestaurantIdPreorderRoute: RestaurantIdPreorderRoute,
+  RestaurantIdWaitlistRoute: RestaurantIdWaitlistRoute,
+}
+
+const RestaurantIdRouteWithChildren = RestaurantIdRoute._addFileChildren(
+  RestaurantIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BookingsRoute: BookingsRoute,
+  EventsRoute: EventsRoute,
+  HomeRoute: HomeRoute,
   ProfileRoute: ProfileRoute,
-  VenueVenueIdRoute: VenueVenueIdRoute,
-  VenueVenueIdBookRoute: VenueVenueIdBookRoute,
+  SocialRoute: SocialRouteWithChildren,
+  WalletRoute: WalletRoute,
+  AuthOtpRoute: AuthOtpRoute,
+  AuthPhoneRoute: AuthPhoneRoute,
+  ChatFriendIdRoute: ChatFriendIdRoute,
+  EventIdRoute: EventIdRoute,
+  RestaurantIdRoute: RestaurantIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

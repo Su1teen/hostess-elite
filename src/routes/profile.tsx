@@ -1,155 +1,165 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Star, Flame, TrendingUp, Calendar } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import {
+  ChevronRight,
+  Heart,
+  Bell,
+  Shield,
+  Globe,
+  Sparkles,
+  LogOut,
+  Star,
+  CreditCard,
+  Users,
+} from "lucide-react";
+import { Authed } from "@/components/layout/Authed";
+import { PageShell, SectionTitle } from "@/components/layout/PageShell";
 import { GlassCard } from "@/components/layout/GlassCard";
-import { mockBookings, mockUserProfile } from "@/data/mockBookings";
-import { CATEGORY_CONFIG } from "@/types/venue.types";
-import { cn } from "@/lib/utils";
+import { Tag } from "@/components/common/Tag";
+import { useAppStore } from "@/store/app-store";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
-  head: () => ({
-    meta: [
-      { title: "My Profile — Hostess" },
-      { name: "description", content: "Your premium booking profile, visit history and lifestyle feed." },
-    ],
-  }),
 });
 
 function ProfilePage() {
-  const user = mockUserProfile;
-  const upcoming = mockBookings.filter((b) => b.status === "upcoming");
-  const completed = mockBookings.filter((b) => b.status === "completed");
+  const profile = useAppStore((s) => s.profile);
+  const cards = useAppStore((s) => s.cards);
+  const bookings = useAppStore((s) => s.bookings);
+  const signOut = useAppStore((s) => s.signOut);
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background pb-24 md:pt-20">
-      <div className="px-4 pt-[max(1.5rem,env(safe-area-inset-top))] md:pt-4 max-w-3xl mx-auto">
+    <Authed>
+      <PageShell>
+        <SectionTitle title="Профиль" />
 
-        {/* VIP Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="relative">
-            <img src={user.avatar} alt={user.name} className="w-18 h-18 md:w-20 md:h-20 rounded-2xl object-cover" />
-            <div className="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-gradient-to-r from-neon-gold to-neon-purple text-background">
-              {user.tier}
+        <GlassCard variant="medium" rim className="p-5 mb-3 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/10 via-transparent to-transparent pointer-events-none" />
+          <div className="relative flex items-center gap-4">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="relative"
+            >
+              <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-[var(--gold)]/30">
+                <img src={profile.avatar} alt="" className="w-full h-full object-cover" />
+              </div>
+              <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-b from-[var(--gold)] to-[var(--gold-soft)] flex items-center justify-center text-black">
+                <Sparkles className="w-3 h-3" />
+              </span>
+            </motion.div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-xl font-semibold tracking-tight">{profile.name}</h2>
+                <Tag variant="gold">{profile.tier}</Tag>
+              </div>
+              <p className="text-sm text-muted-foreground">{profile.username} · {profile.phone}</p>
+              <p className="text-[12px] text-muted-foreground mt-0.5 italic">{profile.bio}</p>
             </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">{user.name}</h1>
-            <p className="text-xs text-muted-foreground">Member since {user.memberSince}</p>
-          </div>
-        </div>
+        </GlassCard>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <GlassCard className="p-3 text-center">
-            <TrendingUp className="w-4 h-4 mx-auto text-neon-cyan mb-1" />
-            <p className="text-lg font-bold">{user.totalVisits}</p>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Visits</p>
+        <div className="grid grid-cols-3 gap-3 mb-3">
+          <GlassCard className="p-4 text-center">
+            <Star className="w-4 h-4 text-[var(--gold)] mx-auto mb-1" />
+            <div className="text-xl font-semibold">{profile.visits}</div>
+            <div className="text-[11px] text-muted-foreground">визитов</div>
           </GlassCard>
-          <GlassCard className="p-3 text-center">
-            <Flame className="w-4 h-4 mx-auto text-neon-gold mb-1" />
-            <p className="text-lg font-bold capitalize">{user.favoriteCategory}</p>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Favorite</p>
+          <GlassCard className="p-4 text-center">
+            <CreditCard className="w-4 h-4 text-[var(--gold)] mx-auto mb-1" />
+            <div className="text-xl font-semibold">{cards.length}</div>
+            <div className="text-[11px] text-muted-foreground">карт</div>
           </GlassCard>
-          <GlassCard className="p-3 text-center">
-            <Star className="w-4 h-4 mx-auto text-neon-purple mb-1" />
-            <p className="text-lg font-bold">${user.totalSpent.toLocaleString()}</p>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Spent</p>
+          <GlassCard className="p-4 text-center">
+            <Users className="w-4 h-4 text-[var(--gold)] mx-auto mb-1" />
+            <div className="text-xl font-semibold">11</div>
+            <div className="text-[11px] text-muted-foreground">друзей</div>
           </GlassCard>
         </div>
 
-        {/* Upcoming Bookings */}
-        <div className="mb-6">
-          <h2 className="text-base font-semibold mb-3 flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-primary" />
-            Upcoming
-          </h2>
-          {upcoming.length === 0 ? (
-            <GlassCard variant="subtle" className="p-6 text-center">
-              <p className="text-sm text-muted-foreground">No upcoming bookings</p>
-              <Link to="/" className="text-primary text-sm underline mt-2 inline-block">Discover venues</Link>
-            </GlassCard>
-          ) : (
-            <div className="flex flex-col gap-3">
-              {upcoming.map((booking) => {
-                const config = CATEGORY_CONFIG[booking.venueCategory];
-                return (
-                  <GlassCard key={booking.id} className="flex gap-3 p-3">
-                    <img src={booking.imageUrl} alt={booking.venueName} className="w-16 h-16 rounded-xl object-cover shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <div className={cn("w-1.5 h-1.5 rounded-full", config.dotClass)} />
-                        <h3 className="text-sm font-semibold truncate">{booking.venueName}</h3>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {booking.date} · {booking.time} · {booking.guests} guests
-                      </p>
-                      <p className="text-xs font-medium mt-1">Table #{booking.tableNumber}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-neon-gold/10 text-neon-gold font-medium">Upcoming</span>
-                    </div>
-                  </GlassCard>
-                );
-              })}
+        <GlassCard className="p-4 mb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Оборот за год</p>
+              <p className="text-2xl font-semibold gold-text">
+                {profile.totalSpent.toLocaleString("ru-RU")} ₸
+              </p>
             </div>
-          )}
-        </div>
-
-        {/* Stories / Memories */}
-        <div className="mb-6">
-          <h2 className="text-base font-semibold mb-3">Memories</h2>
-          <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-            {completed.map((booking) => {
-              const config = CATEGORY_CONFIG[booking.venueCategory];
-              return (
-                <div key={booking.id} className="shrink-0 w-28">
-                  <div className={cn("w-20 h-20 mx-auto rounded-full p-0.5 mb-1.5", `bg-gradient-to-br from-[var(--neon-${booking.venueCategory === "restaurant" ? "gold" : booking.venueCategory === "nightlife" ? "purple" : booking.venueCategory === "beauty" ? "burgundy" : "cyan"})] to-transparent`)}>
-                    <img src={booking.imageUrl} alt={booking.venueName} className="w-full h-full rounded-full object-cover" />
-                  </div>
-                  <p className="text-[10px] text-center text-muted-foreground truncate">{booking.venueName}</p>
-                  <p className="text-[9px] text-center text-muted-foreground/60">{booking.date}</p>
-                </div>
-              );
-            })}
-            {/* Add more placeholder */}
-            <div className="shrink-0 w-28 flex flex-col items-center justify-center">
-              <div className="w-20 h-20 rounded-full border border-dashed border-white/10 flex items-center justify-center">
-                <span className="text-2xl text-muted-foreground/30">+</span>
-              </div>
-              <p className="text-[10px] text-center text-muted-foreground/40 mt-1.5">Visit more</p>
+            <div className="text-right">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">С нами с</p>
+              <p className="text-sm">{profile.memberSince}</p>
             </div>
           </div>
+        </GlassCard>
+
+        {/* Quick links */}
+        <SectionTitle title="Быстрые ссылки" />
+        <div className="space-y-2 mb-3">
+          {[
+            { to: "/bookings", label: "Мои брони", desc: `${bookings.length} визитов`, icon: <Heart className="w-4 h-4" /> },
+            { to: "/wallet", label: "Кошелёк и карты", desc: `${cards.length} карт лояльности`, icon: <CreditCard className="w-4 h-4" /> },
+            { to: "/social/contacts", label: "Контакты", desc: "11 друзей в Hostess", icon: <Users className="w-4 h-4" /> },
+          ].map((q) => (
+            <Link
+              key={q.to}
+              to={q.to}
+              className="block glass rounded-2xl p-3 flex items-center gap-3 hover:bg-white/[0.07] transition"
+            >
+              <div className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center">
+                {q.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold">{q.label}</div>
+                <div className="text-[11px] text-muted-foreground">{q.desc}</div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            </Link>
+          ))}
         </div>
 
-        {/* Lifestyle Feed */}
-        <div className="mb-6">
-          <h2 className="text-base font-semibold mb-3">Events & Offers</h2>
-          <div className="flex flex-col gap-3">
-            <GlassCard className="overflow-hidden">
-              <div className="relative h-36 md:h-44">
-                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80" alt="Event" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3">
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-neon-purple/20 text-neon-purple font-semibold">This Weekend</span>
-                  <h3 className="text-sm font-bold mt-1">Midnight Jazz at Velvet Lounge</h3>
-                  <p className="text-[10px] text-muted-foreground">Live jazz, craft cocktails & city views. Sat 11 PM.</p>
-                </div>
+        <SectionTitle title="Настройки" />
+        <GlassCard variant="medium" className="overflow-hidden">
+          {[
+            { label: "Уведомления", icon: <Bell className="w-4 h-4" />, value: "Push, СМС" },
+            { label: "Конфиденциальность", icon: <Shield className="w-4 h-4" />, value: "Видны друзьям" },
+            { label: "Язык", icon: <Globe className="w-4 h-4" />, value: "Русский" },
+            { label: "Тема", icon: <Sparkles className="w-4 h-4" />, value: "Тёмная · Liquid" },
+          ].map((s, i) => (
+            <button
+              key={s.label}
+              className={`w-full text-left flex items-center gap-3 p-4 hover:bg-white/[0.04] transition ${
+                i !== 0 ? "border-t border-white/[0.05]" : ""
+              }`}
+            >
+              <div className="w-9 h-9 rounded-xl bg-white/[0.05] flex items-center justify-center">
+                {s.icon}
               </div>
-            </GlassCard>
-            <GlassCard className="overflow-hidden">
-              <div className="relative h-36 md:h-44">
-                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="Offer" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3">
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-neon-gold/20 text-neon-gold font-semibold">Exclusive</span>
-                  <h3 className="text-sm font-bold mt-1">Chef's Table at Ember & Oak</h3>
-                  <p className="text-[10px] text-muted-foreground">5-course tasting menu with wine pairing. Limited seats.</p>
-                </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold">{s.label}</div>
+                <div className="text-[11px] text-muted-foreground">{s.value}</div>
               </div>
-            </GlassCard>
-          </div>
-        </div>
-      </div>
-    </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            </button>
+          ))}
+        </GlassCard>
+
+        <button
+          onClick={() => {
+            signOut();
+            navigate({ to: "/" });
+          }}
+          className="mt-4 w-full glass border-rose-400/30 bg-rose-400/5 hover:bg-rose-400/10 transition rounded-2xl p-3 flex items-center justify-center gap-2 text-rose-300 text-sm"
+        >
+          <LogOut className="w-4 h-4" />
+          Выйти из аккаунта
+        </button>
+
+        <p className="text-center text-[10px] text-muted-foreground mt-4">
+          HOSTESS ELITE · v1.0 · build 2026.04.30
+        </p>
+      </PageShell>
+    </Authed>
   );
 }
