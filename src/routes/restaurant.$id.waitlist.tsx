@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ChevronLeft,
@@ -33,7 +33,11 @@ function WaitlistPage() {
 
   const join = useAppStore((s) => s.joinWaitlist);
   const leave = useAppStore((s) => s.leaveWaitlist);
-  const myEntries = useAppStore((s) => s.waitlist.filter((w) => w.restaurantId === r.id));
+  const waitlist = useAppStore((s) => s.waitlist);
+  const myEntries = useMemo(
+    () => waitlist.filter((w) => w.restaurantId === r.id),
+    [waitlist, r.id],
+  );
   const toggleNotify = useAppStore((s) => s.toggleWaitlistNotify);
 
   // Live position update simulation when joined
