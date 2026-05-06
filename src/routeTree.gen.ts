@@ -20,6 +20,7 @@ import { Route as SocialMapRouteImport } from './routes/social.map'
 import { Route as SocialContactsRouteImport } from './routes/social.contacts'
 import { Route as SocialChatRouteImport } from './routes/social.chat'
 import { Route as RestaurantIdRouteImport } from './routes/restaurant.$id'
+import { Route as PlaceIdRouteImport } from './routes/place.$id'
 import { Route as EventIdRouteImport } from './routes/event.$id'
 import { Route as ChatFriendIdRouteImport } from './routes/chat.$friendId'
 import { Route as AuthPhoneRouteImport } from './routes/auth.phone'
@@ -84,6 +85,11 @@ const RestaurantIdRoute = RestaurantIdRouteImport.update({
   path: '/restaurant/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaceIdRoute = PlaceIdRouteImport.update({
+  id: '/place/$id',
+  path: '/place/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventIdRoute = EventIdRouteImport.update({
   id: '/event/$id',
   path: '/event/$id',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/auth/phone': typeof AuthPhoneRoute
   '/chat/$friendId': typeof ChatFriendIdRoute
   '/event/$id': typeof EventIdRoute
+  '/place/$id': typeof PlaceIdRoute
   '/restaurant/$id': typeof RestaurantIdRouteWithChildren
   '/social/chat': typeof SocialChatRoute
   '/social/contacts': typeof SocialContactsRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/auth/phone': typeof AuthPhoneRoute
   '/chat/$friendId': typeof ChatFriendIdRoute
   '/event/$id': typeof EventIdRoute
+  '/place/$id': typeof PlaceIdRoute
   '/restaurant/$id': typeof RestaurantIdRouteWithChildren
   '/social/chat': typeof SocialChatRoute
   '/social/contacts': typeof SocialContactsRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/auth/phone': typeof AuthPhoneRoute
   '/chat/$friendId': typeof ChatFriendIdRoute
   '/event/$id': typeof EventIdRoute
+  '/place/$id': typeof PlaceIdRoute
   '/restaurant/$id': typeof RestaurantIdRouteWithChildren
   '/social/chat': typeof SocialChatRoute
   '/social/contacts': typeof SocialContactsRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/auth/phone'
     | '/chat/$friendId'
     | '/event/$id'
+    | '/place/$id'
     | '/restaurant/$id'
     | '/social/chat'
     | '/social/contacts'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/auth/phone'
     | '/chat/$friendId'
     | '/event/$id'
+    | '/place/$id'
     | '/restaurant/$id'
     | '/social/chat'
     | '/social/contacts'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/auth/phone'
     | '/chat/$friendId'
     | '/event/$id'
+    | '/place/$id'
     | '/restaurant/$id'
     | '/social/chat'
     | '/social/contacts'
@@ -267,6 +279,7 @@ export interface RootRouteChildren {
   AuthPhoneRoute: typeof AuthPhoneRoute
   ChatFriendIdRoute: typeof ChatFriendIdRoute
   EventIdRoute: typeof EventIdRoute
+  PlaceIdRoute: typeof PlaceIdRoute
   RestaurantIdRoute: typeof RestaurantIdRouteWithChildren
 }
 
@@ -347,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/restaurant/$id'
       fullPath: '/restaurant/$id'
       preLoaderRoute: typeof RestaurantIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/place/$id': {
+      id: '/place/$id'
+      path: '/place/$id'
+      fullPath: '/place/$id'
+      preLoaderRoute: typeof PlaceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/event/$id': {
@@ -453,6 +473,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthPhoneRoute: AuthPhoneRoute,
   ChatFriendIdRoute: ChatFriendIdRoute,
   EventIdRoute: EventIdRoute,
+  PlaceIdRoute: PlaceIdRoute,
   RestaurantIdRoute: RestaurantIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport

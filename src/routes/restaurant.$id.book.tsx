@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import {
   ChevronLeft,
   Minus,
@@ -13,7 +12,9 @@ import { Authed } from "@/components/layout/Authed";
 import { GlassCard } from "@/components/layout/GlassCard";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { Tag } from "@/components/common/Tag";
-import { TABLES, TIME_SLOTS } from "@/data/menus";
+import { TIME_SLOTS } from "@/data/menus";
+import { getFloorPlan } from "@/data/floor-plans";
+import { FloorPlan } from "@/components/restaurant/FloorPlan";
 import { getRestaurantById } from "@/data/restaurants";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +27,8 @@ function BookPage() {
   const r = getRestaurantById(id)!;
   const navigate = useNavigate();
 
-  const tables = TABLES[r.id] ?? [];
+  const plan = getFloorPlan(r.id);
+  const tables = plan.tables;
 
   const [guests, setGuests] = useState(2);
   const [selectedDate, setSelectedDate] = useState(0);
@@ -152,13 +154,13 @@ function BookPage() {
 
           {/* Floor plan */}
           <GlassCard variant="medium" className="p-5 mb-3">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Стол</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">План зала</p>
                 <p className="text-sm">
                   {selectedTable
-                    ? `Стол №${selectedTable} · ${tables.find((t) => t.number === selectedTable)?.zone}`
-                    : "Выберите место на схеме"}
+                    ? `Стол №${selectedTable} · ${tables.find((t) => t.number === selectedTable)?.zone} · ${tables.find((t) => t.number === selectedTable)?.seats} мест`
+                    : "Выберите место на плане"}
                 </p>
               </div>
               <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
@@ -173,56 +175,7 @@ function BookPage() {
                 </span>
               </div>
             </div>
-            <div className="relative aspect-[16/9] bg-[radial-gradient(ellipse_at_center,oklch(0.12_0.02_270)_0%,oklch(0.06_0.005_270)_100%)] rounded-2xl border border-white/[0.06] overflow-hidden">
-              {/* Decorative grid */}
-              <svg className="absolute inset-0 w-full h-full opacity-[0.06]">
-                <defs>
-                  <pattern id="dot" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1" fill="white" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#dot)" />
-              </svg>
-
-              {/* Bar */}
-              <div className="absolute top-2 left-3 right-3 h-7 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Бар</span>
-              </div>
-
-              {tables.map((t) => {
-                const isSelected = selectedTable === t.number;
-                const free = t.available;
-                return (
-                  <motion.button
-                    key={t.id}
-                    whileHover={free ? { scale: 1.06 } : {}}
-                    whileTap={free ? { scale: 0.95 } : {}}
-                    onClick={() => free && setSelectedTable(t.number)}
-                    disabled={!free}
-                    style={{
-                      left: `${t.x}%`,
-                      top: `${t.y}%`,
-                      width: `${t.width}%`,
-                      height: `${t.height}%`,
-                    }}
-                    className={cn(
-                      "absolute flex items-center justify-center text-[10px] font-semibold transition-colors",
-                      t.shape === "circle" ? "rounded-full" : "rounded-lg",
-                      isSelected
-                        ? "bg-[var(--gold)] text-black border-2 border-[var(--gold)] shadow-[0_0_24px_oklch(0.86_0.13_85/0.5)]"
-                        : free
-                          ? "bg-emerald-400/15 border-2 border-emerald-400/60 text-emerald-200"
-                          : "bg-rose-400/10 border-2 border-rose-400/40 text-rose-300/60 cursor-not-allowed",
-                    )}
-                  >
-                    <div className="text-center leading-tight">
-                      <div>{t.number}</div>
-                      <div className="text-[8px] opacity-80">{t.seats} ч.</div>
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
+            <FloorPlan plan={plan} selectedTable={selectedTable} onSelect={setSelectedTable} />
           </GlassCard>
 
           {/* Comment */}
